@@ -2,7 +2,7 @@
 
 # ignore all files starting with .
 .*
-
+__pycache__/
 # ignore packaged files
 *.7z
 *.dmg
