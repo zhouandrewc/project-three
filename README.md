@@ -16,6 +16,9 @@ We train classification models, using the f<sub>0.5</sub>-score metric to evalua
 * numpy
 * sklearn
 * imblearn
+* Streamlit
+* Flask
+* d3
 
 ### Techniques Used
 
@@ -36,9 +39,13 @@ Our data are from the [Panel Study of Income Dynamics](https://psidonline.isr.um
 
 Utility functions
 
-* [Notebooks]
+* Notebooks
 
 Notebooks for inserting data into sql, cleaning data, and modeling.
+
+* [Site](site)
+
+The Streamlit/Flask/d3 app I created to demonstrate predictions and allow data exploration.
 
 * [Presentation](project-three-slides.pdf)
 
