@@ -42,8 +42,9 @@ def prepro(X_train, X_test=None, scale=False):
 
     cont_transformer = Pipeline(steps=[('imputer', SimpleImputer(strategy='median')), ('scaler', StandardScaler())])
 
-    cat_transformer = Pipeline(steps=[('imputer', SimpleImputer(strategy='constant', fill_value=None)), ('onehot', OneHotEncoder(sparse=False, handle_unknown="ignore"))])#, ('scaler', StandardScaler())])
+    cat_transformer = Pipeline(steps=[('imputer', SimpleImputer(strategy='constant', fill_value=None)), ('onehot', OneHotEncoder(sparse=False, handle_unknown="ignore"))])
     cat_transformer = cat_transformer[0:2]
+    
     if not scale:
         cont_transformer = cont_transformer[0]
 
@@ -51,9 +52,6 @@ def prepro(X_train, X_test=None, scale=False):
     X_test_prepro = prepro_help(X_test, cont_transformer, cat_transformer, True)
 
     return X_train_prepro, X_test_prepro
-
-# take out a single loop into a score function? for RF where cv isn't necessary
-# pass in a dict key
 
 def cross_val(model, X, y, weights, scale=False, sampler=None, cv=None):
     if not cv:
@@ -67,7 +65,6 @@ def cross_val(model, X, y, weights, scale=False, sampler=None, cv=None):
 
     scores = {}
 
-    # oversample?
     for train_idx, val_idx, in cv.split(X, y):
 
         X_tr, y_tr = X.iloc[train_idx,:], y.iloc[train_idx]
@@ -95,33 +92,28 @@ def single_val(model, X_tr, y_tr, X_v, y_v, weights, scale=False, sampler=None):
     X_train_prepro, X_val_prepro = prepro(X_tr, X_v, scale=scale)
 
     sample_weights = weights[X_train_prepro.index]
-    # get weights working with this
+    
     if sampler:
         X_and_weights_train_prepro = pd.concat([X_train_prepro, sample_weights], axis=1)
         X_and_weights_train_prepro, y_tr = sampler.fit_sample(X_and_weights_train_prepro, y_tr)
         X_train_prepro = X_and_weights_train_prepro.drop(labels="survey_weight", axis=1)
         sample_weights = X_and_weights_train_prepro["survey_weight"]
 
-    if type(model) == XGBClassifier:
-        eval_set = [(X_train_prepro, y_tr), (X_val_prepro, y_v)]
-        model.fit(X_train_prepro, y_tr, eval_set=eval_set, early_stopping_rounds=10, verbose=False)
+    if type(model) != KNeighborsClassifier:
+        model.fit(X_train_prepro, y_tr, sample_weight=weights[X_train_prepro.index])
     else:
-
-        if type(model) != KNeighborsClassifier:
-            model.fit(X_train_prepro, y_tr, sample_weight=weights[X_train_prepro.index])
-        else:
-            model.fit(X_train_prepro, y_tr)
+        model.fit(X_train_prepro, y_tr)
     y_pred = model.predict(X_val_prepro)
 
     return get_scores(y_v, y_pred, weights)
 
-# want to weight the scores too probably
+
 def get_scores(y_true, y_pred, weights):
-    acc = accuracy_score(y_true, y_pred)
+    acc = accuracy_score(y_true, y_pred, sample_weight=weights[y_true.index])
     f1 = f1_score(y_true, y_pred, zero_division=0, sample_weight=weights[y_true.index])
     fp5 = fbeta_score(y_true, y_pred, beta=0.5, zero_division=0, sample_weight=weights[y_true.index])
-    pre = precision_score(y_true, y_pred, zero_division=0)
-    rec = recall_score(y_true, y_pred, zero_division=0)
+    pre = precision_score(y_true, y_pred, zero_division=0, sample_weight=weights[y_true.index])
+    rec = recall_score(y_true, y_pred, zero_division=0, sample_weight=weights[y_true.index])
 
     return acc, f1, fp5, pre, rec
 
@@ -150,6 +142,17 @@ def tune_hyper(X_tr, y_tr, model_class, keywords, param_grid, weights, randomize
 def get_best_params(scores, metric):
     return sort_scores_by_metric(scores, metric)[0]
 
+def print_best_params(best_params, keywords, metric=None):
+    params = best_params[0][0]
+    sampler = best_params[0][1]
+    scaling = best_params[0][2]
+    score = best_params[1]
+
+    print("Classifier Params:", list(zip(keywords, params)))
+    print("Sampler:", sampler)
+    print("Scaling:", scaling)
+    print(metric, "Score (CV):", score)
+    
 def get_scores_by_metric(scores, metric):
     params = scores.keys()
     metric_scores = map(lambda x: x[metric], scores.values())
@@ -158,7 +161,6 @@ def get_scores_by_metric(scores, metric):
 def sort_scores_by_metric(scores, metric):
     return sorted(get_scores_by_metric(scores, metric), key=lambda x: -x[1])
 
-# refactor to make train its separate function
 def train_best_model(X_tr, y_tr, model_class, keywords, scores, metric, weights, randomized=True):
     best_params = get_best_params(scores, metric)
     clf_params, sampler, scale = best_params[0]
@@ -174,9 +176,7 @@ def train_model(X_tr, y_tr, model_class, keywords, params, sampler, scale, weigh
     if randomized:
         kwargs["random_state"] = 0
     model = model_class(**kwargs)
-    if model_class == XGBClassifier:
-        model.fit(X_tr, y_tr, verbose=False)#, eval_set=[(X_tr, y_tr)], early_stopping_rounds=10, verbose=False)
-    elif model_class == KNeighborsClassifier:
+    if model_class == KNeighborsClassifier:
         model.fit(X_tr, y_tr)
     else:
         model.fit(X_tr, y_tr, sample_weight=weights[X_tr.index])
