@@ -11,3 +11,5 @@ This directory should hold folders with ```.sps``` and ```.txt``` files in them,
 The specific files used were: the 2001 PSID Family Survey, the 2017 release of the Individual Survey (containing all information from all individual surveys), the 2002 Childhood Development Supplement (CDS) child interview, the 2002 CDS primary caregiver (PCG) interview, the 2002 CDS test score assessment, the 2002 CDS demographic survey data, the 2017 Transition into Adulthood Supplement, and the Childhood and Adoption History data from 1985-2017.
 
 Several dozen variables from these various surveys are combined together in our data cleaning and storage routine in order to synthesize the final dataset. Note that ```mod_vars_clean.txt``` contains a list of the variables necessary, which is used in our SQL processing notebook to grab only the necessary datafields from these tables to put into our SQL database.
+
+The folder [wlth2001](wlth2001) is included to demonstrate the proper structure. The example [SPS File](wlth2001/WLTH2001_example.sps) is the original ```.sps``` file, but ```WLTH2001_example.txt``` is left blank as the original would be excessively large.
