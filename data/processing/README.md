@@ -22,7 +22,7 @@ Below is a detailed workflow explaining how to acquire and process the data used
 
 Specific files used are: the 2001 Family Survey, the 2001 Family Wealth Survey, the Individual Survey (2017 Release), the 2002 Child Development Supplement, the 2017 Transition into Adulthood Supplement, and the Childhood and Adoption History File (2017 Release).
 
-These data were downloaded in the SPS fixed file format and are designed for the [SPSS program](https://www.ibm.com/products/spss-statistics). The data for each survey are stored in a ```.txt.``` file, with a ```.sps``` format file indicating how to read in the raw data. Unfortunately pandas does not support directly reading files of this format as its ```read_spss``` function cannot read this specific SPSS format.
+These data were downloaded in the SPS fixed file format and are designed for the [SPSS program](https://en.wikipedia.org/wiki/SPSS). The data for each survey are stored in a ```.txt.``` file, with a ```.sps``` format file indicating how to read in the raw data. Unfortunately pandas does not support directly reading files of this format as its ```read_spss``` function cannot read this specific SPSS format.
 
 * Store these ```.zip``` files in [```data/processing```](data/processing), unzip each to an individual folder, and run [```main.py```](data/processing/main.py). ```main.py``` will look in all subdirectories for paired ```.sps``` and ```txt``` files, convert them to csv, and store them in the [```data/csv```](data/csv) directory.
 

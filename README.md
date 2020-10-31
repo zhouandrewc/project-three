@@ -34,33 +34,41 @@ We train classification models, using the f<sub>0.5</sub>-score metric to evalua
 
 Our data are from the [Panel Study of Income Dynamics](https://psidonline.isr.umich.edu/). We use data concerning individuals aged 6-17 in 2001 and attempt to predict whether they will have graduated with a bachelor's degree by 2017.
 
-We do not include the data in this repository due to its size. We include one example within the [```data/processing```](data/processing) folder at [```data/processing/wlth2001```](data/processing/wlth2001).
+The data were originally formatted as ```.sps``` and ```.txt``` file pairs, meant for use with the [SPSS Statistics](https://en.wikipedia.org/wiki/SPSS) software.
 
-Note that the data acquisition, parsing, and cleaning processing is rather complicated given the nature of the survey and datasets. Find a detailed documentation of the workflow in the [```data/processing``` README](data/processing/README.md)
+We do not include the original data in this repository due to its size. The original data comprise 9 ```.sps``` and ```.txt``` pairs, each stored in the PSID data packages.
 
+We include one example within the [```data/processing```](data/processing) folder at [```data/processing/wlth2001```](data/processing/wlth2001). The ```.sps``` file is left as is but the ```.txt``` file is blank.
 
+Note that the data acquisition, parsing, and cleaning processing is rather complicated given the nature of the survey and datasets. Find a detailed documentation of the workflow in the [```data/processing``` README](data/processing/README.md).
+
+Thank you to [hanjae112](https://github.com/hanjae1122) for the [PSID ASCII reader](https://github.com/hanjae1122/PSID), which I used to convert the PSID data into a pandas-readable format.
 
 ## Contents
 
-* [Data](data)
+* [```data/```](data)
+    * [```processing/```](data/processing):
+    The routines to convert the original PSID data into pandas-readable format.
+    * [```csv/```](data/csv):
+    The ```.csv``` files that correspond to the original ```.sps``` files. Nine were created in total. One file, [```DEMOG.csv```](data/csv/DEMOG.csv), is left as an example, while others are omitted due to excessive size.
+    * [```data.csv```](data/data.csv):
+    The fully-processed data used for modeling and training.
 
+* [```util/```](util)
 
+Utility functions for Jupyter notebooks. Includes separate routines for parsing and cleaning data, model selection, and model evaluation.
 
-* [Utilities](util)
-
-Utility functions for Jupyter notebooks. Includes separate files for parsing and cleaning data, model selection, and model evaluation.
-
-* [Notebooks](notebooks)
+* [```notebooks/```](notebooks)
 
 Notebooks for inserting data into sql, cleaning data, and our final modeling and evaluation.
 
-* [Site](site)
+* [```site/```](site)
 
 The Streamlit/Flask/d3 app I created to demonstrate predictions and allow data exploration.
 
-* [Presentation](project-three-slides.pdf)
+* [```presentation/```](presentation)
 
-The presentation I gave on my work.
+Contains the [presentation](presentation/project-three-slides.pdf) I gave on my work.
 
 ## Acknowledgments
 
