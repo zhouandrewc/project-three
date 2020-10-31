@@ -1,0 +1,105 @@
+TABLE1: fam2001er/FAM2001ER.csv
+ER17022: famid68
+ER17002: famid01
+ER18470T: food_security
+ER20456: total_fam_income00
+ER20377C: rural_urban_code01
+ER20376: geo_region_code01
+
+TABLE2: ind2017er/IND2017ER.csv
+ER33601: famid01
+ER33602: indid01
+ER33638: cds_interview
+ER34335: grad_college15
+ER33604: age_01
+ER34336: degtype15
+ER34331: attend_college15
+ER34320: grad_hs15
+ER34228: enrolled13
+ER34229: curr_grade13
+ER34221: degtype13
+ER34220: grad_hs13
+ER34219: highest_grade13
+ER34347: enrolled15
+ER34348: curr_grade15
+ER34363: up_wtr_college15
+ER34367: up_grad_college15
+ER34368: up_degtype15
+ER34380: up_curr_grade15
+ER34534: grad_college17
+ER34334: highest_college_yr15
+ER34535: degtype17
+ER34533: highest_college_yr17
+ER34567: up_degtype17
+ER34579: up_curr_grade17
+ER34551: up_grad_hs17
+ER34549: up_wtr_school17
+ER34562: up_wtr_college17
+ER34566: up_grad_college17
+ER34547: curr_grade17
+ER34530: wtr_college17
+ER34519: grad_hs17
+ER33901: famid07
+ER33902: indid07
+ER34501: famid17
+ER34502: indid17
+ER33703: reln_head01_03
+ER30001: famid68
+ER30002: indid68
+
+TABLE3: cds2002/CHILD.csv
+CHLDID01: famid01
+CHLDSN01: indid01
+Q23H3A: live_w_mother02
+Q23H3B: live_w_father02
+Q23H3C1: live_w_smother02
+Q23H3D1: live_w_sfather02
+Q23J1: race_code
+
+TABLE: cds2002/PCG_CHLD.csv
+PCHID01: famid01
+PCHSN01: indid01
+Q21D1B: live_w_father02_pcg
+Q21D1A: live_w_mother02_pcg
+Q21D1C: adopt_mother02
+Q21D1D: adopt_father02
+Q21D1E: stepmother02
+Q21D1F: stepfather02
+
+TABLE4: wlth2001/WLTH2001.csv
+S501: famid01
+S517: wealth_w_equity01
+
+TABLE5: cds2002/ASSESSMT.csv
+ASMTID01: famid01
+ASMTSN01: indid01
+Q24BRPR: reading_score02
+Q24APPR: math_score02
+
+TABLE6: cds2002/DEMOG.csv
+DEMID01: famid01
+DEMSN01: indid01
+CH02PRWT: survey_weight
+
+TABLE8: TA2017/TA2017.csv
+TA170003: famid17
+TA170004: indid17
+TA171955: race_code17_1
+TA171956: race_code17_2
+TA171957: race_code17_3
+
+TABLE9: family_map/fim10621_gid_BO_2_BAL_wide_cds.csv
+ER30001: famid68
+ER30002: indid68
+ER30001_P_F: famid68_bio_father
+ER30002_P_F: indid68_bio_father
+ER30001_P_M: famid68_bio_mother
+ER30002_P_M: indid68_bio_mother
+
+TABLE10: cah85_17/CAH85_17.csv
+CAH10: famid68
+CAH11: indid68
+CAH27: hispanicity
+CAH28: race_code_cah_1
+CAH29: race_code_cah_2
+CAH30: race_code_cah_3
