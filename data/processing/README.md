@@ -20,11 +20,11 @@ Below is a detailed workflow explaining how to acquire and process the data used
 
 * Download [packaged datasets](https://simba.isr.umich.edu/data/PackagedData.aspx) as ```.zip``` files from PSID
 
-Specific files used are: the 2001 Family Survey, the 2001 Family Wealth Survey, the Individual Survey (2017 Release), the 2002 Child Development Supplement, the 2017 Transition into Adulthood Supplement, and the Childhood and Adoption History File (2017 Release).
+Specific files used are: the 2001 Family Survey, the 2001 Family Wealth Survey, the Individual Survey (2017 Release), the 2002 Child Development Supplement, the 2017 Transition into Adulthood Supplement, and the Childhood and Adoption History File (2017 Release). These were all ```.zip``` files that could be extracted to obtain ```.sps``` and ```.txt``` files.
 
-These data were downloaded in the SPS fixed file format and are designed for the [SPSS program](https://en.wikipedia.org/wiki/SPSS). The data for each survey are stored in a ```.txt``` file, with a ```.sps``` format file indicating how to read in the raw data. Unfortunately pandas does not support directly reading files of this format as its [```read_spss```](https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.read_spss.html) function cannot read this specific SPSS format.
+These data were stored in the SPS fixed file format and are designed for the [SPSS program](https://en.wikipedia.org/wiki/SPSS). The data for each survey are stored in a ```.txt``` file, with a ```.sps``` format file indicating how to read in the raw data. Unfortunately pandas does not support directly reading files of this format as its [```read_spss```](https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.read_spss.html) function cannot read this specific SPSS format.
 
-* Store these ```.zip``` files in this directory, unzip each to an individual folder, and run [```main.py```](main.py). ```main.py``` will look in all subdirectories for paired ```.sps``` and ```txt``` files, convert them to csv, and store them in the [```data/csv```](../csv) directory.
+* Store these ```.zip``` files in this directory, unzip each to an individual folder, and run [```main.py```](main.py). ```main.py``` will use [```ascii_reader.py```](ascii_reader.py) to look in all subdirectories for paired ```.sps``` and ```txt``` files, convert them to csv, and store them in the [```data/csv```](../csv) directory.
 
 * Use the notebook [```1_sql_logic.ipynb```](../../notebooks/1_sql_logic.ipynb) to read in these ```.csv``` files. This routine will consult [```variables_to_extract.txt```](variables_to_extract.txt) to find and rename our variables of interest, then store them in a PostgreSQL database. The database location is hardcoded as ```localhost:5432/psid``` and may be changed by the user.
 
