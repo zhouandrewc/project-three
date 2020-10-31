@@ -19,6 +19,7 @@ We train classification models, using the f<sub>0.5</sub>-score metric to evalua
 * Streamlit
 * Flask
 * d3
+* PostgreSQL
 
 ### Techniques Used
 
@@ -33,15 +34,25 @@ We train classification models, using the f<sub>0.5</sub>-score metric to evalua
 
 Our data are from the [Panel Study of Income Dynamics](https://psidonline.isr.umich.edu/). We use data concerning individuals aged 6-17 in 2001 and attempt to predict whether they will have graduated with a bachelor's degree by 2017.
 
+We do not include the data in this repository due to its size. We include one example within the [```data/processing```](data/processing) folder at [```data/processing/wlth2001```](data/processing/wlth2001).
+
+Note that the data acquisition, parsing, and cleaning processing is rather complicated given the nature of the survey and datasets. Find a detailed documentation of the workflow in the [```data/processing``` README](data/processing/README.md)
+
+
+
 ## Contents
+
+* [Data](data)
+
+
 
 * [Utilities](util)
 
-Utility functions
+Utility functions for Jupyter notebooks. Includes separate files for parsing and cleaning data, model selection, and model evaluation.
 
-* Notebooks
+* [Notebooks](notebooks)
 
-Notebooks for inserting data into sql, cleaning data, and modeling.
+Notebooks for inserting data into sql, cleaning data, and our final modeling and evaluation.
 
 * [Site](site)
 

@@ -147,18 +147,6 @@ def get_env_type(num):
     else:
         return None
 
-def get_region(num):
-    if num == 1:
-        return "Northeast"
-    if num == 2:
-        return "North Central"
-    if num == 3:
-        return "South"
-    if num == 4:
-        return "West"
-    else:
-        return "Other"
-
 def live_w_both_parents(row):
     num_par = (row["live_w_mother02"] == 1 or row["live_w_mother02_pcg"] == 1) + (row["live_w_father02"] == 1 or row["live_w_father02_pcg"] == 1) + (row["live_w_smother02"] == 1 or row["stepmother02"] == 1) + (row["live_w_sfather02"] == 1 or row["stepfather02"] == 1) + (row["adopt_mother02"] == 1) + (row["adopt_father02"] == 1)
     return 1 if num_par >= 2 else 0

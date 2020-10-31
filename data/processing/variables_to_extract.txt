@@ -1,4 +1,8 @@
-TABLE1: fam2001er/FAM2001ER.csv
+### FORMAT:
+### TABLE: [name of csv in data/csv/] [name of SQL table]
+### [PSID variable code]: [renamed variable for user convenience]
+
+TABLE: FAM2001ER.csv fam01
 ER17022: famid68
 ER17002: famid01
 ER18470T: food_security
@@ -6,7 +10,7 @@ ER20456: total_fam_income00
 ER20377C: rural_urban_code01
 ER20376: geo_region_code01
 
-TABLE2: ind2017er/IND2017ER.csv
+TABLE: IND2017ER.csv ind17
 ER33601: famid01
 ER33602: indid01
 ER33638: cds_interview
@@ -47,7 +51,7 @@ ER33703: reln_head01_03
 ER30001: famid68
 ER30002: indid68
 
-TABLE3: cds2002/CHILD.csv
+TABLE: CHILD.csv child02
 CHLDID01: famid01
 CHLDSN01: indid01
 Q23H3A: live_w_mother02
@@ -56,7 +60,7 @@ Q23H3C1: live_w_smother02
 Q23H3D1: live_w_sfather02
 Q23J1: race_code
 
-TABLE: cds2002/PCG_CHLD.csv
+TABLE: PCG_CHLD.csv pcg02
 PCHID01: famid01
 PCHSN01: indid01
 Q21D1B: live_w_father02_pcg
@@ -66,37 +70,29 @@ Q21D1D: adopt_father02
 Q21D1E: stepmother02
 Q21D1F: stepfather02
 
-TABLE4: wlth2001/WLTH2001.csv
+TABLE: WLTH2001.csv wlth01
 S501: famid01
 S517: wealth_w_equity01
 
-TABLE5: cds2002/ASSESSMT.csv
+TABLE: ASSESSMT.csv assess
 ASMTID01: famid01
 ASMTSN01: indid01
 Q24BRPR: reading_score02
 Q24APPR: math_score02
 
-TABLE6: cds2002/DEMOG.csv
+TABLE6: DEMOG.csv demog
 DEMID01: famid01
 DEMSN01: indid01
 CH02PRWT: survey_weight
 
-TABLE8: TA2017/TA2017.csv
+TABLE: TA2017.csv ta17
 TA170003: famid17
 TA170004: indid17
 TA171955: race_code17_1
 TA171956: race_code17_2
 TA171957: race_code17_3
 
-TABLE9: family_map/fim10621_gid_BO_2_BAL_wide_cds.csv
-ER30001: famid68
-ER30002: indid68
-ER30001_P_F: famid68_bio_father
-ER30002_P_F: indid68_bio_father
-ER30001_P_M: famid68_bio_mother
-ER30002_P_M: indid68_bio_mother
-
-TABLE10: cah85_17/CAH85_17.csv
+TABLE10: CAH85_17.csv cah
 CAH10: famid68
 CAH11: indid68
 CAH27: hispanicity
