@@ -1,3 +1,15 @@
+'''
+# Helper functions for data cleaning.
+# Andrew Zhou
+#
+# The documentation for these functions will be sparse as essentially they
+# come from a close reading of the codebooks distributed with the PSID data.
+# Dozens of variables are combined, particularly for race, in order to infer
+# features when they are not necessarily straightforward to extract from the
+# data, especially as certain groups of people are surveyed in different survey
+# rounds.
+'''
+
 # in the CAH (Childbirth and Adoption) data, some children have answers from multiple parents and caregivers, so we aggregate those answers
 
 def agg_race_cah(arr):
@@ -18,6 +30,12 @@ def agg_hispanicity(arr):
 # a bachelor's degree
 
 def filter_na_response(row):
+    '''
+    Fairly involved routine to determine whether an individual is considered
+    a nonresponse (and therefore dropped) in terms of whether they received a
+    bachelor's degree. We only include individuals for whom we can say that
+    they definitely received such a degree.
+    '''
 
     if has_bachelors(row):
         return True
@@ -27,11 +45,6 @@ def filter_na_response(row):
     for feat in degtypes:
         if row[feat] >= 1 and row[feat] <= 6:
             return True
-
-    # okay, we can do:
-    # if no college degree in 15, and no school/degree by 17 then
-    # we return true
-    # same with 13
 
     # if they haven't graduated from hs, gone to college,
     # or graduated from college by 2017
@@ -78,12 +91,10 @@ def has_bachelors(row):
         if row[feat] == 20:
             return True
 
-    # check whether "post-graduate work" actually means degree
     curr_grades = ["curr_grade13", "curr_grade15", "curr_grade17", "curr_grade17", "up_curr_grade15", "up_curr_grade17"]
     for feat in curr_grades:
         if row[feat] == 18:
             return True
-    # are some of these people nonresponses?
 
     if row["degtype17"] == 1:
         return False
@@ -135,7 +146,6 @@ def get_env_type(num):
         return "rural"
     else:
         return None
-
 
 def get_region(num):
     if num == 1:

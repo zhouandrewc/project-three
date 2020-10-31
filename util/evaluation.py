@@ -1,9 +1,20 @@
+'''
+# Helper functions for model evaluation.
+#
+# Andrew Zhou
+'''
+
 from util.modeling import prepro
 import matplotlib.pyplot as plt
 import seaborn as sns
 from sklearn.metrics import plot_confusion_matrix
 
 def confusion_matrix(model, X_train, X_val, y_val, weights, normalize=None, model_name=None):
+    '''
+    Prints the confusion matrix for a particular model. Weighted according to
+    sample weight and optionally normalized to print percentages rather than
+    counts.
+    '''
     fig, ax = plt.subplots(figsize=(10, 10))
     sns.set(font_scale=1.5)
     sns.set_style("white")

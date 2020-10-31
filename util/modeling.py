@@ -1,3 +1,9 @@
+'''
+# Helper functions for data preprocessing and modeling.
+#
+# Andrew Zhou
+'''
+
 import pandas as pd
 import numpy as np
 import sklearn
@@ -14,8 +20,11 @@ from imblearn.over_sampling import SMOTE
 
 
 def prepro_help(X, cont_transformer, cat_transformer, is_test=False):
-
-
+    '''
+    Helper function for preprocessing. Called twice in prepro, once to fit and
+    transform the training data using the transformers, and again to transform
+    the test data without fitting.
+    '''
     if type(X) != pd.DataFrame:
         return None
 
@@ -37,6 +46,12 @@ def prepro_help(X, cont_transformer, cat_transformer, is_test=False):
     return X_prepro
 
 def prepro(X_train, X_test=None, scale=False):
+    '''
+    Helper function for preprocessing. Imputes empty values, one hot encodes
+    categorical variables, and optionally scales. If passed only a training set,
+    fits and transforms the training set. If passed a test set as well, fits
+    and transforms the training set and transforms the testing set based on the fit.
+    '''
     cont_feats = X_train.select_dtypes(include=['int64', 'float64']).columns
     cat_feats = X_train.select_dtypes(include=['object']).columns
 
@@ -44,7 +59,7 @@ def prepro(X_train, X_test=None, scale=False):
 
     cat_transformer = Pipeline(steps=[('imputer', SimpleImputer(strategy='constant', fill_value=None)), ('onehot', OneHotEncoder(sparse=False, handle_unknown="ignore"))])
     cat_transformer = cat_transformer[0:2]
-    
+
     if not scale:
         cont_transformer = cont_transformer[0]
 
@@ -54,6 +69,12 @@ def prepro(X_train, X_test=None, scale=False):
     return X_train_prepro, X_test_prepro
 
 def cross_val(model, X, y, weights, scale=False, sampler=None, cv=None):
+    '''
+    Cross validates a model. Returns a dictionary of accuracy, f1, f0.5 ("fp5"),
+    precision, and recall scores.
+
+    By default uses 5-fold stratified cross-validation.
+    '''
     if not cv:
         cv =  StratifiedKFold(n_splits = 5, shuffle=True, random_state=0)
 
@@ -88,11 +109,13 @@ def cross_val(model, X, y, weights, scale=False, sampler=None, cv=None):
     return scores
 
 def single_val(model, X_tr, y_tr, X_v, y_v, weights, scale=False, sampler=None):
-
+    '''
+    Helper function to validate a single time on a train and validation set.
+    '''
     X_train_prepro, X_val_prepro = prepro(X_tr, X_v, scale=scale)
 
     sample_weights = weights[X_train_prepro.index]
-    
+
     if sampler:
         X_and_weights_train_prepro = pd.concat([X_train_prepro, sample_weights], axis=1)
         X_and_weights_train_prepro, y_tr = sampler.fit_sample(X_and_weights_train_prepro, y_tr)
@@ -109,6 +132,10 @@ def single_val(model, X_tr, y_tr, X_v, y_v, weights, scale=False, sampler=None):
 
 
 def get_scores(y_true, y_pred, weights):
+    '''
+    Given the true y and predicted y (and sample weights), get the evaluation
+    metrics for the predictions.
+    '''
     acc = accuracy_score(y_true, y_pred, sample_weight=weights[y_true.index])
     f1 = f1_score(y_true, y_pred, zero_division=0, sample_weight=weights[y_true.index])
     fp5 = fbeta_score(y_true, y_pred, beta=0.5, zero_division=0, sample_weight=weights[y_true.index])
@@ -118,6 +145,15 @@ def get_scores(y_true, y_pred, weights):
     return acc, f1, fp5, pre, rec
 
 def tune_hyper(X_tr, y_tr, model_class, keywords, param_grid, weights, randomized=True, scaling=[False], samplers=[None], print_prog=(0,0)):
+    '''
+    Given a cartesian product of different classifier parameters (param_grid),
+    tests all possible combinations of those parameters for a specific model
+    class model_class. Will also include scaling and sampling strategies in
+    the tuning process.
+
+    Returns a dictionary containing 5 different evaluation scores for each
+    set of hyperparameters.
+    '''
     scores = {}
 
     count = 0
@@ -140,9 +176,18 @@ def tune_hyper(X_tr, y_tr, model_class, keywords, param_grid, weights, randomize
     return scores
 
 def get_best_params(scores, metric):
+    '''
+    Given the score matrix from tune_hyper, gets the best set of parameters
+    for a given metric, such as "fp5".
+    '''
     return sort_scores_by_metric(scores, metric)[0]
 
 def print_best_params(best_params, keywords, metric=None):
+    '''
+    Given a set of best params for a particular metric and the keywords to
+    which they correspond, prints the score for that param. Optionally pass the
+    name of the metric for printing clarity.
+    '''
     params = best_params[0][0]
     sampler = best_params[0][1]
     scaling = best_params[0][2]
@@ -152,22 +197,36 @@ def print_best_params(best_params, keywords, metric=None):
     print("Sampler:", sampler)
     print("Scaling:", scaling)
     print(metric, "Score (CV):", score)
-    
+
 def get_scores_by_metric(scores, metric):
+    '''
+    Get only the scores for a particular metric ("f1", "fp5", "acc", "pre,"
+    "rec")
+    '''
     params = scores.keys()
     metric_scores = map(lambda x: x[metric], scores.values())
     return list(zip(params, metric_scores))
 
 def sort_scores_by_metric(scores, metric):
+    '''
+    Get the sorted scores for a particular metric.
+    '''
     return sorted(get_scores_by_metric(scores, metric), key=lambda x: -x[1])
 
 def train_best_model(X_tr, y_tr, model_class, keywords, scores, metric, weights, randomized=True):
+    '''
+    Given the best params found through hyperparameter tuning for a particular
+    model and metric, trains the best model using those parameters.
+    '''
     best_params = get_best_params(scores, metric)
     clf_params, sampler, scale = best_params[0]
 
     return train_model(X_tr, y_tr, model_class, keywords, clf_params, sampler, scale, weights=weights, randomized=randomized)
 
 def train_model(X_tr, y_tr, model_class, keywords, params, sampler, scale, weights, randomized=True):
+    '''
+    Trains a model given a set of parameters.
+    '''
     X_tr, _ = prepro(X_tr, scale=scale)
     if sampler:
         X_tr, y_tr = sampler.fit_sample(X_tr, y_tr)

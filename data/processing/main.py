@@ -1,5 +1,8 @@
-# Read all .sps formatting headers in all folders in the directory,
-# then use ascii_reader to convert them to .csv
+# Routine to take the raw .txt files formatted according to SPS format
+# and convert them into .csv files, which we later select particular columns
+# from and store in a SQL database.
+#
+# Andrew Zhou
 
 from ascii_reader import ascii_
 import os
